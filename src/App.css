@@ -42,8 +42,15 @@ form{
   font-weight: 600;
 }
 
-.button-container button:hover{
+.button-container button:hover:not(:disabled){
   background-color:white;
   color: darkcyan;
   transition: all 0.3s ease;
 }
+
+.button-container button:disabled{
+  color: rgba(255, 255, 255, 0.452);
+  border: 1px solid rgba(255, 255, 255, 0.452);
+  cursor: not-allowed;
+}
+

@@ -4,7 +4,7 @@ import { clearHeader } from "../features/header/headerSlice"
 import api from "../api/api"
 
 
-function ButtonList(){
+function ButtonList({handleFormSave, toggleSave}){
     const dispatch = useDispatch()
     const header = useSelector((status)=>status.header)
     const details = useSelector((status)=>status.detail)
@@ -14,14 +14,14 @@ function ButtonList(){
     const filteredHeaderData = Object.fromEntries(Object.entries(header).filter(([key])=>key!=="resetAt"))
 
     const detailTableData = filteredDetails.map((d,idx)=>({
-        vr_no:Number(header.vr_no),
+        vr_no:header.vr_no,
         sr_no:idx+1,
         ...d,
     }))
 
     const data = {
-        "header_table":filteredHeaderData,
-        "detail_table":detailTableData,
+        header_table:filteredHeaderData,
+        detail_table:detailTableData,
     }
     
     console.log("filtered:",filteredDetails)
@@ -29,7 +29,7 @@ function ButtonList(){
     console.log("headerdata:",filteredHeaderData)
     console.log("detailsdata:",detailTableData)
 
-
+    let isDisabled= !toggleSave || filteredDetails.length===0
 
 
     const newSale=()=>{
@@ -47,15 +47,14 @@ function ButtonList(){
         try{
             const res = await api.post('/header/multiple',data)
             console.log(res)
-            // if(res){
-            //     dispatch(clearHeader())
-            //     dispatch(clearDetail())
-            // }
+
         }catch(err){
             console.log(err)
         }
     }
 
+
+    console.log("save:",toggleSave)
     return(
         <>
         <div className="button-container">
@@ -65,7 +64,10 @@ function ButtonList(){
             <button>
                 Print
             </button>
-            <button onClick={()=>handleSubmit(data)} >
+            <button onClick={handleFormSave} >
+                Save
+            </button>
+            <button onClick={()=>handleSubmit(data)} disabled={isDisabled}>
                 Submit
             </button>
         </div>

@@ -4,7 +4,7 @@ const today = new Date().toISOString()
 console.log(today)
 
 export const initialState = {
-    vr_no:parseInt(""),
+    vr_no:Number(),
     vr_date:today.split("T")[0],
     ac_name:"",
     ac_amt:0,

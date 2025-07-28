@@ -114,7 +114,7 @@ function DetailForm(){
       </thead>
       <tbody>
         {details.map((detail, idx) => (
-          <tr key={idx} >
+          <tr key={idx} className="fs-6">
             <td>{idx + 1}</td>
             <td>
               <Select
