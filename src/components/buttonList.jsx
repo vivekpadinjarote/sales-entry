@@ -17,17 +17,22 @@ function ButtonList({handleFormSave, toggleSave}){
         vr_no:header.vr_no,
         sr_no:idx+1,
         ...d,
+        qty:parseInt(d.qty,10),
+        rate:parseInt(d.rate,10),
+        
     }))
 
-    const data = {
+    const saleData = {
         header_table:filteredHeaderData,
         detail_table:detailTableData,
     }
-    
-    console.log("filtered:",filteredDetails)
-    console.log(header)
-    console.log("headerdata:",filteredHeaderData)
-    console.log("detailsdata:",detailTableData)
+
+    // console.log("filtered:",filteredDetails)
+    // console.log(header)
+    // console.log("headerdata:",filteredHeaderData)
+    // console.log("detailsdata:",detailTableData)
+
+    console.log("saleData:",saleData)
 
     let isDisabled= !toggleSave || filteredDetails.length===0
 
@@ -43,14 +48,29 @@ function ButtonList({handleFormSave, toggleSave}){
         
     }
 
-    const handleSubmit=async(data)=>{
-        try{
-            const res = await api.post('/header/multiple',data)
-            console.log(res)
+    function convertDateFormat(dateStr) {
+    const [year, month, day] = dateStr.split("-");
+    return `${year}-${day}-${month}`;
+}
 
-        }catch(err){
-            console.log(err)
-        }
+    const handleSubmit=async(data)=>{
+        try {
+        const formattedHeader = {
+            ...data.header_table,
+            vr_date: convertDateFormat(data.header_table.vr_date)
+        };
+
+        const formattedData = {
+            ...data,
+            header_table: formattedHeader
+        };
+
+        const res = await api.post("header/multiple", formattedData);
+        console.log(res);
+        alert(res)
+    } catch (err) {
+        console.error("API Error:", err);
+    }
     }
 
 
@@ -67,7 +87,7 @@ function ButtonList({handleFormSave, toggleSave}){
             <button onClick={handleFormSave} >
                 Save
             </button>
-            <button onClick={()=>handleSubmit(data)} disabled={isDisabled}>
+            <button onClick={()=>handleSubmit(saleData)} disabled={isDisabled}>
                 Submit
             </button>
         </div>

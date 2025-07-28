@@ -33,7 +33,6 @@ function App() {
         alert("Data Saved")
         setSave(!save)
         console.log(save)
-
     }
 
     
