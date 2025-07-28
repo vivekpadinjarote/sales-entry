@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { setTotalAmount } from "../header/headerSlice";
 import { addRow,removeRow, updateRow } from "./detailSlice";
 import Select from 'react-select'
+import { MdDelete } from "react-icons/md";
 
 function DetailForm(){
     const dispatch = useDispatch();
@@ -29,10 +30,10 @@ function DetailForm(){
         dispatch(setTotalAmount(total))
     },[details,dispatch])
 
-    
-                console.log(items)
-
-    const handleAdd = () => {
+    useEffect(() => {
+  const last = details[details.length - 1];
+  const isLastRowFilled = Object.values(last).some(v => v !== '');
+  if (last && isLastRowFilled) {
     dispatch(addRow({
       item_code: '',
       item_name: '',
@@ -40,7 +41,13 @@ function DetailForm(){
       qty: '',
       rate: ''
     }));
-  };
+  }
+}, [details, dispatch]);
+
+
+    
+                console.log(items)
+
 
     const handleRemove = (index)=>{
         dispatch(removeRow(index));
@@ -65,8 +72,8 @@ function DetailForm(){
     const selectStyle = {
     option: (provided, state) => ({
       ...provided,
-      color: state.isSelected ? "white" : "black", // text color
-      backgroundColor: state.isSelected ? "#5981acff" : "white", // selected background
+      color: state.isSelected ? "white" : "black",
+      backgroundColor: state.isSelected ? "#5981acff" : "white",
       ":hover": {
         backgroundColor: "#d3d0d0ff",
       },
@@ -87,48 +94,84 @@ function DetailForm(){
 
     return (
         <>
-        <div>
-            <h2>
-                Detail Table
-            </h2>
+        <div className="container mt-4">
+            <div className="col d-flex mb-3" > 
+  <h4 className="mb-1 m-auto">Detail Table</h4>
+</div>
+  <div className="table-responsive">
+    <table className="table table-bordered align-middle text-center">
+      <thead className="table-light">
+        <tr>
+          <th className="col-0">Sl No</th>
+          <th className="col-2">Item Code</th>
+          <th className="col-3">Item Name</th>
+          <th className="col-4">Description</th>
+          <th className="col-1">Qty</th>
+          <th className="col-1">Rate</th>
+          <th className="col-1">Sub Total</th>
+          <th className="col-1">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {details.map((detail, idx) => (
+          <tr key={idx} >
+            <td>{idx + 1}</td>
+            <td>
+              <Select
+                options={itemOptions}
+                value={itemOptions.find(opt => opt.value === detail.item_code) || null}
+                onChange={e => handleChange(idx, "item_code", e?.value)}
+                placeholder="Select"
+                styles={selectStyle}
+              />
+            </td>
+            <td>
+              <input
+                className="form-control"
+                value={detail.item_name}
+                readOnly
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                className="form-control"
+                value={detail.description}
+                onChange={e => handleChange(idx, "description", e.target.value)}
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                className="form-control"
+                value={detail.qty}
+                onChange={e => handleChange(idx, "qty", e.target.value)}
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                className="form-control"
+                value={detail.rate}
+                onChange={e => handleChange(idx, "rate", e.target.value)}
+              />
+            </td>
+            <td>{(detail.qty * detail.rate) || 0}</td>
+            <td>
+                <MdDelete 
+                type="button"
+                className="text-danger fs-4"
+                onClick={() => handleRemove(idx)}/>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sl no</th>
-                        <th>Item Code</th>
-                        <th>Item Name</th>
-                        <th>Qty</th>
-                        <th>Rate</th>
-                        <th>Sub Total</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {details.map((detail,idx)=>(
-                        <tr key={idx}>
-                            <td>{idx+1}</td>
-                            <td>
-                                <Select 
-                                options={itemOptions}
-                                value={itemOptions.find(opt => opt.value === detail.item_code ||null)}
-                                onChange={e=> handleChange(idx,"item_code",e?.value)}
-                                placeholder="Select"
-                                isClearable
-                                styles={selectStyle}
-                                />
-                            </td>
-                            <td><input value={detail.item_name} readOnly /></td>
-                            <td><input type="number" value={detail.qty} onChange={e=> handleChange(idx,"qty",e.target.value)} /></td>
-                            <td><input type="number" value={detail.rate} onChange={e => handleChange(idx, "rate", e.target.value)} /></td>
-                            <td>{(detail.qty * detail.rate) || 0}</td>
-                            <td><button type="button" onClick={() => handleRemove(idx)}>❌</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button type="button" onClick={handleAdd}>+ Add Row</button>
-        </div>
+  
+</div>
+
         </>
     )
 }

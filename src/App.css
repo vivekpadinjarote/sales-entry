@@ -1,0 +1,49 @@
+table{
+  height: auto;
+}
+
+.table-responsive{
+  height: 800px;
+}
+
+form{
+  width: 800px !important;
+}
+
+.super-container{
+  border: 1px solid darkcyan;
+  width: fit-content;
+  margin: 5px 0;
+  height: 99vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  background-color:darkcyan;
+  padding: 8px 5px;
+  position: sticky;
+  top: 0;
+}
+
+.button-container button{
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 10px;
+  color: white;
+  padding: 2px 8px;
+  margin: 3px 0;
+  font-weight: 600;
+}
+
+.button-container button:hover{
+  background-color:white;
+  color: darkcyan;
+  transition: all 0.3s ease;
+}

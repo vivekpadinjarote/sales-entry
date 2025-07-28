@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = [
+    {
+    item_code: '',
+    item_name: '',
+    description: '',
+    qty: '',
+    rate: ''
+  }
+];
 
 const detailSlice = createSlice({
     name:"detail",
@@ -19,8 +27,11 @@ const detailSlice = createSlice({
         setDetail:(state,action)=>{
             return action.payload;
         },
+        clearDetail:(state)=>{
+            return initialState
+        }
     },
 });
 
-export const {addRow, updateRow, removeRow, setDetail } = detailSlice.actions;
+export const {addRow, updateRow, removeRow, setDetail, clearDetail } = detailSlice.actions;
 export default detailSlice.reducer;
