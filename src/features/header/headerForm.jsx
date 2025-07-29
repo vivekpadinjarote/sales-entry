@@ -1,9 +1,4 @@
-
-
-function HeaderForm({register,errors,header}) {
-
-
-
+function HeaderForm({ register, errors, header }) {
   return (
     <>
       <form className="container mt-3 mb-5">
@@ -17,7 +12,9 @@ function HeaderForm({register,errors,header}) {
               className="form-control"
             />
             {errors.vr_no && (
-              <div className="text-danger small">{errors.vr_no.message}</div>
+              <div className="text-danger small">
+                Voucher number is required
+              </div>
             )}
           </div>
 
@@ -69,8 +66,6 @@ function HeaderForm({register,errors,header}) {
             />
           </div>
         </div>
-
-        
       </form>
     </>
   );
